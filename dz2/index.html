@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    <title>Гамбургер</title>
+</head>
+
+<body>
+
+    <script>
+        'use strict';
+
+        class Hamburger {
+
+            constructor(size, stuffing) {
+                this.size = size;   // большой маленький
+                this.stuffing = stuffing;   // сыр салат картофель
+                this.toppings = new Array(0);   //  добавки - майонез приправа
+                //this.topping = this.topping[];
+                console.log(size + ' ' + 'гамбургер ' + 'нчинка- ' + stuffing);
+            }
+            addTopping(topping) {  // Добавить добавку
+                this.toppings.push(topping);
+                if (this.toppings.length > 0) {
+                    console.log('добавки - ' + this.toppings);
+                }
+            }
+            calculatePrice(size, stuffing) {  /* Узнать цену */
+
+                let price = 0.;
+                if (this.size === 'большой') {
+                    price += 100;
+                }
+                if (this.size === 'маленький') {
+                    price += 50;
+                }
+                if (this.stuffing === 'сыр') {
+                    price += 10;
+                }
+                if (this.stuffing === 'салат') {
+                    price += 20;
+                }
+                if (this.stuffing === 'картофель') {
+                    price += 15;
+                }
+                for (let i = 0; i < this.toppings.length; i++) {
+                    if (this.toppings[i] === 'майонез') {
+                        price += 20;
+                    }
+                    if (this.toppings[i] === 'приправа') {
+                        price += 15;
+                    }
+                }
+
+                console.log('стоимость ' + price);
+            }
+            calculateCalories() {   // Узнать калорийность
+                let calories = 0.;
+                if (this.size === 'большой') {
+                    calories += 40;
+                }
+                if (this.size === 'маленький') {
+                    calories += 20;
+                }
+                if (this.stuffing === 'сыр') {
+                    calories += 20;
+                }
+                if (this.stuffing === 'салат') {
+                    calories += 5;
+                }
+                if (this.stuffing === 'картофель') {
+                    calories += 10;
+                }
+                for (let i = 0; i < this.toppings.length; i++) {
+                    if (this.toppings[i] === 'майонез') {
+                        calories += 5;
+                    }
+
+                }
+                console.log('калорийность' + ' ' + calories);
+            }
+        }
+
+
+        let hamburger = new Hamburger('большой', 'сыр');
+        hamburger.addTopping(['майонез', 'приправа']);
+        hamburger.calculatePrice();
+        hamburger.calculateCalories();
+    </script>
+
+</body>
+
+</html>
