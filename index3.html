@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>Title</title>
+
+</head>
+<body>
+    <div class="name">
+        Имя <input type="text" class="name"></input>
+        <div class="errMs hidden">Допускаются только буквы</div>
+    </div>
+    <br>
+    <div class="phone">
+        Телефон <input type="text" class="phone">
+        <div class="errMs hidden">Телефон должен иметь вид: +7(000)000-0000</div>
+    </div>
+    <br>
+    <div class="email">
+        Email <input type="text" class="email">
+        <div class="errMs hidden">E-mail выглядит как mymail@mail.ru, 
+            или my.mail@mail.ru, или my-mail@mail.ru</div>
+    </div>
+    <br>
+    Сообщение
+    <form name="">
+        <textarea rows="7" cols="40" ></textarea>
+    </form>
+    <br>
+    <button onclick="inputField()">Отправить</button>
+
+    <script>
+    let regexpS = [/^[a-zа-яё]+$/i, /^\+7\(\d{3}\)\d{3}-\d{4}$/,
+        /^[\w._-]+@\w+\.[a-z]{2,4}$/i];
+    let fields = ['name', 'phone', 'email'];
+    
+    function inputField()   {
+        for(let i = 0; i < 3; i++)  {
+            let elClass = '.${fields[i]}';
+            let el1 = document.querySelector('.' + fields[i]);
+            elArr = Array.prototype.slice.call(el1.childNodes);
+            let name = elArr[1].value;
+            regexp = regexpS[i];
+            if(!regexp.test(name))  {
+                elArr[1].classList.add('error');
+                elArr[3].classList.remove('hidden');
+            }   else    {
+                elArr[1].classList.remove('error');
+                elArr[3].classList.add('hidden');
+            }
+        }
+    }
+    </script>
+</body>
