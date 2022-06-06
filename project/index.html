@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style1.css">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Интернет-магазин</title>
+</head>
+<body>
+    <header>
+        <button class="btn-cart" type="button" 
+        onclick="cartOnOf()">Корзина</button>
+        <div class="cart hidden">
+            <div>
+                <div class="cartItem1">
+                <div>Название товара</div>
+                <div>Количество шт.</div>
+                <div>Цена ₽</div>
+                <div>Стоимость ₽</div>
+                </div>
+                <div class="cartItem2">
+
+                </div>
+            </div>
+            <div class="cartFooter">
+            <button class="btnClarCart" type="button" 
+            onclick="clearCart()">Очистить корзину</button>
+            <div class="totalPrice">Товаров в корзине на сумму ₽</div>
+            </div>
+        </div>
+
+    </header>
+    <main>
+        <div class="products"></div>
+    </main>
+    <script src="js/main.js"></script>
+    <!--<script src="js/appCart.js"></script>-->
+</body>
+</html>
