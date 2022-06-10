@@ -1,132 +1,267 @@
-/*const products = [
-    {id: 1, title: 'Notebook', img: 'laptope_014.png', price: 2000},
-    {id: 2, title: 'Mouse',img: 'Мышка.png', price: 20},
-    {id: 3, title: 'Keyboard',img: 'keyboard.png', price: 200},
-    {id: 4, title: 'Gamepad',img: 'handhelds.png', price: 50},
-];*/
-var products = new Array;
-var url = '/catalogData.json';
-    var goods = new Array;
-    const API_URL =
-    'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses';
+const API = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses';
 
-    var cartAll = new Array;
-    //console.log(cartAll);
-    var cartAllS = 0.;
-    var clearContent;
-    var totalPriceInn;
-    var cartReset;
-    var clearCart;
-    
-    function cartOnOf() {
-        document.querySelector('.cart').classList.toggle('hidden');
-    }
-
-    class ListLoad {
-        getJson(){ 
-        return fetch(`${API_URL + url}`)
-            .then(result => result.json())
-            //.then(data => this .getData(data))
-            .catch(error => {
-                console.log(error);
+const app = new Vue({
+    el: '#app',
+    data: {
+        catalogUrl: '/catalogData.json',
+        products: [],
+        filtered: [],
+        cartItem: [],   //
+        imgCatalog: 'https://via.placeholder.com/200x150',
+        userSearch: '',
+        show: false
+    },
+    methods: {
+        filter(){
+         const regexp = new RegExp(this.userSearch, 'i');
+         this.filtered = this.products.filter(product => regexp.test(product.product_name));
+        },
+        getJson(url){
+            return fetch(url)
+                .then(result => result.json())
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+        addProduct(product){
+                
+            let find = this.cartItem.find(prod => product.id_product === prod.id_product);
+            if  (find)  {
+                find.count++;
+            }   else    {
+                this.$set(product, 'count', 1);
+                let idx = this.cartItem.push(product);
+                this.$set(product, 'idx', idx - 1);
+            }
+        },
+        removeProduct(product)  {
+            product.count--;
+            if(product.count < 1)   {
+                this.cartItem.splice(product.idx, 1);
+            }
+        },
+        cartOnOff() {
+            this.show = !this.show;
+            //console.log(this. products[1]);
+            let el = document.querySelector('.cart-block');
+            if(this.show)    {
+                el.classList.remove('invisible');
+            }
+            else    {
+                el.classList.add('invisible');
+            }
+        }
+    },
+    mounted(){
+       this.getJson(`${API + this.catalogUrl}`)
+           .then(data => {
+               for(let el of data){
+                   //console.log(el);
+                   this.products.push(el);
+                   this.filtered.push(el);
+               }
+           });
+        this.getJson(`getProducts.json`)
+            .then(data => {
+                for(let el of data){
+                    this.products.push(el);
+                    
+                }
             })
-        }
     }
-    const listLoad = new  ListLoad();
-    listLoad.getJson().then(value => {
-        
-        goods = value;
-        //console.log(goods);
+})
 
+// class List {
+//     constructor(url, container, list = list2){
+//         this.container = container;
+//         this.list = list;
+//         this.url = url;
+//         this.goods = [];
+//         this.allProducts = [];
+//         this.filtered = [];
+//         this._init();
+//     }
+//     getJson(url){
+//         return fetch(url ? url : `${API + this.url}`)
+//             .then(result => result.json())
+//             .catch(error => {
+//                 console.log(error);
+//             })
+//     }
+//     handleData(data){
+//         this.goods = [...data];
+//         this.render();
+//     }
+//     calcSum(){
+//         return this.allProducts.reduce((accum, item) => accum += item.price, 0);
+//     }
+//     render(){
+//         const block = document.querySelector(this.container);
+//         for (let product of this.goods){
+//             const productObj = new this.list[this.constructor.name](product);
+//             console.log(productObj);
+//             this.allProducts.push(productObj);
+//             block.insertAdjacentHTML('beforeend', productObj.render());
+//         }
+//     }
+//     filter(value){
+//         const regexp = new RegExp(value, 'i');
+//         this.filtered = this.allProducts.filter(product => regexp.test(product.product_name));
+//         this.allProducts.forEach(el => {
+//             const block = document.querySelector(`.product-item[data-id="${el.id_product}"]`);
+//             if(!this.filtered.includes(el)){
+//                 block.classList.add('invisible');
+//             } else {
+//                 block.classList.remove('invisible');
+//             }
+//         })
+//     }
+//     _init(){
+//         return false
+//     }
+// }
+//
+// class Item{
+//     constructor(el, img = 'https://placehold.it/200x150'){
+//         this.product_name = el.product_name;
+//         this.price = el.price;
+//         this.id_product = el.id_product;
+//         this.img = img;
+//     }
+//     render(){
+//         return `<div class="product-item" data-id="${this.id_product}">
+//                 <img src="${this.img}" alt="Some img">
+//                 <div class="desc">
+//                     <h3>${this.product_name}</h3>
+//                     <p>${this.price} $</p>
+//                     <button class="buy-btn"
+//                     data-id="${this.id_product}"
+//                     data-name="${this.product_name}"
+//                     data-price="${this.price}">Купить</button>
+//                 </div>
+//             </div>`
+//     }
+// }
+//
+// class ProductsList extends List{
+//     constructor(cart, container = '.products', url = "/catalogData.json"){
+//         super(url, container);
+//         this.cart = cart;
+//         this.getJson()
+//             .then(data => this.handleData(data));
+//     }
+//     _init(){
+//         document.querySelector(this.container).addEventListener('click', e => {
+//             if(e.target.classList.contains('buy-btn')){
+//                 this.cart.addProduct(e.target);
+//             }
+//         });
+//         document.querySelector('.search-form').addEventListener('submit', e => {
+//             e.preventDefault();
+//             this.filter(document.querySelector('.search-field').value)
+//         })
+//     }
+// }
+//
+//
+// class ProductItem extends Item{}
+//
+// class Cart extends List{
+//     constructor(container = ".cart-block", url = "/getBasket.json"){
+//         super(url, container);
+//         this.getJson()
+//             .then(data => {
+//                 this.handleData(data.contents);
+//             });
+//     }
+//     addProduct(element){
+//         this.getJson(`${API}/addToBasket.json`)
+//             .then(data => {
+//                 if(data.result === 1){
+//                     let productId = +element.dataset['id'];
+//                     let find = this.allProducts.find(product => product.id_product === productId);
+//                     if(find){
+//                         find.quantity++;
+//                         this._updateCart(find);
+//                     } else {
+//                         let product = {
+//                             id_product: productId,
+//                             price: +element.dataset['price'],
+//                             product_name: element.dataset['name'],
+//                             quantity: 1
+//                         };
+//                         this.goods = [product];
+//                         this.render();
+//                     }
+//                 } else {
+//                     alert('Error');
+//                 }
+//             })
+//     }
+//     removeProduct(element){
+//         this.getJson(`${API}/deleteFromBasket.json`)
+//             .then(data => {
+//                 if(data.result === 1){
+//                     let productId = +element.dataset['id'];
+//                     let find = this.allProducts.find(product => product.id_product === productId);
+//                     if(find.quantity > 1){
+//                         find.quantity--;
+//                         this._updateCart(find);
+//                     } else {
+//                         this.allProducts.splice(this.allProducts.indexOf(find), 1);
+//                         document.querySelector(`.cart-item[data-id="${productId}"]`).remove();
+//                     }
+//                 } else {
+//                     alert('Error');
+//                 }
+//             })
+//     }
+//     _updateCart(product){
+//        let block = document.querySelector(`.cart-item[data-id="${product.id_product}"]`);
+//        block.querySelector('.product-quantity').textContent = `Quantity: ${product.quantity}`;
+//        block.querySelector('.product-price').textContent = `$${product.quantity*product.price}`;
+//     }
+//     _init(){
+//         document.querySelector('.btn-cart').addEventListener('click', () => {
+//             document.querySelector(this.container).classList.toggle('invisible');
+//         });
+//         document.querySelector(this.container).addEventListener('click', e => {
+//            if(e.target.classList.contains('del-btn')){
+//                this.removeProduct(e.target);
+//            }
+//         })
+//     }
+//
+// }
+//
+// class CartItem extends Item{
+//     constructor(el, img = 'https://placehold.it/50x100'){
+//         super(el, img);
+//         this.quantity = el.quantity;
+//     }
+//     render(){
+//     return `<div class="cart-item" data-id="${this.id_product}">
+//             <div class="product-bio">
+//             <img src="${this.img}" alt="Some image">
+//             <div class="product-desc">
+//             <p class="product-title">${this.product_name}</p>
+//             <p class="product-quantity">Quantity: ${this.quantity}</p>
+//         <p class="product-single-price">$${this.price} each</p>
+//         </div>
+//         </div>
+//         <div class="right-block">
+//             <p class="product-price">$${this.quantity*this.price}</p>
+//             <button class="del-btn" data-id="${this.id_product}">&times;</button>
+//         </div>
+//         </div>`
+//     }
+// }
+// const list2 = {
+//     ProductsList: ProductItem,
+//     Cart: CartItem
+// };
+//
+// let cart = new Cart();
+// let products = new ProductsList(cart);
+// products.getJson(`getProducts.json`).then(data => products.handleData(data));
 
-        var products = new Array(goods.length);
-        var cartAll = new Array (products.length);
-        //console.log(cartAll);
-        for(let i = 0; i < goods.length; i++)   {
-            products[i] = {id: 0, title: '', img: '', price: 0};
-            
-        }
-        for(let i = 0; i < products.length; i++)   {
-            products[i].id = i +1;
-            products[i].title = goods[i].product_name;
-            products[i].img = goods[i].product_name + '.png';
-            products[i].price = goods[i].price;
-        }
-        //console.log(products);
-
-//Функция для формирования верстки каждого товара
-//Добавить в выводе изображение
-const renderProduct = (id, title, img, price) => {
-    return `<div class="product-item" id="${id-1}">
-                <h3>${title}</h3>
-                <img src="img/${img}" alt="">
-                <p>Цена ₽${price}</p>
-                <button class="buy-btn">Купить</button>
-            </div>`
-};
-const renderPage = list => {
-    const productsList = list.map(item => renderProduct(item.id,item.title,item.img,item.price));
-    //console.log(productsList);
-    document.querySelector('.products').innerHTML = productsList.join('');
-};
-
-renderPage(products);
-//console.log(products[1].title);
-
-
-for(let i=0; i < cartAll.length; i++)   {
-    cartAll[i] = {title: '', count: 0, price: 0.0, cost: 0.0};
-    
-}
-console.log(cartAll);
-cartReset = function()  {
-    
-    for(let i=0; i < products.length; i++)  {
-        cartAll[i].title = products[i].title;
-        cartAll[i].count = 0;
-        cartAll[i].price = products[i].price;
-        cartAll.cost = 0.0;
-    }
-}
-cartReset();
-const elFeaturedItems = document.querySelector('.products');
-const addCart = function() {elFeaturedItems.addEventListener('click', event => {
-    if (!event.target.closest('.buy-btn')) {
-        return;
-    }
-    let iId = event.target.closest('.product-item').id;
-    console.log(cartAll[iId].count);
-    cartAll[iId].count = cartAll[iId].count + 1;
-    const elCartItem = document.querySelector('.cartItem2');
-    clearContent = function()   {elCartItem.innerHTML = '';}
-    clearContent(); 
-    cartAllS = 0;
-    for(let i = 0; i < cartAll.length; i++) {
-        if(cartAll[i].count != 0) {
-           cartAll[i].cost = cartAll[i].count * cartAll[i].price;
-           const cartAllI = `
-           <div> ${cartAll[i].title}</div>
-           <div>${cartAll[i].count}</div>
-           <div>${cartAll[i].price}</div> 
-           <div>${cartAll[i].cost}</div>
-           `;
-           elCartItem.innerHTML += cartAllI;
-           cartAllS += cartAll[i].cost;
-        }
-    }
-    totalPriceInn = function()    {
-        document.querySelector(".totalPrice")
-        .innerHTML = `Товаров в корзине на сумму ₽  ${cartAllS}`;
-    }
-    totalPriceInn();
-    });
-}
-addCart();
-clearCart = function() {
-    cartAllS = 0;
-    cartReset();
-    clearContent();
-    totalPriceInn();
-}
-
-});
