@@ -1,0 +1,51 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+    <head> 
+        <meta charset="UTF-8">
+        
+        <link rel="stylesheet" href="style.css" type="text/css"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Datetime superapp</title> 
+        <script src="./src/main.js" type="module"></script> 
+        <!--<script src="./src/howler.js"></script>-->
+    </head> 
+    <body>
+
+        <button id="calcDat" >Калькулятор дат</button>
+        <button id="tim">Таймер</button>
+
+
+        <form id="datecalc" class="hidden"> 
+            <h3>Калькулятор дат</h3> 
+            <label> 
+                <strong>Первая дата:</strong> 
+                <input type="date" name="firstDate"/> 
+            </label> 
+            <label> 
+                <strong>Вторая дата:</strong> 
+                <input type="date" name="secondDate"/> 
+            </label> 
+            <button type="submit">Расчитать промежуток</button> 
+            <p id="datecalc__result"></p> 
+        </form>
+        <form id="timer" class="hidden" name="timer">
+            <h3>Таймер</h3>
+            часов<input type="number" min="0" max="10" value="0" name="hour">
+            минут<input type="number" min="0" max="60" value="0" name="min">
+            секунд<input type="number" min="0" max="60" value="0" name="sec">
+            <input type="submit" value="Пуск"/>
+        </form><br>
+        <form id="timerOut" class="hidden">
+            Осталось <span id="hour"></span> часов
+             <span id="min"></span> минут
+             <span id="sec"></span> секунд <br> <br>
+            
+
+        </form>
+        <span id="startStop" class="hidden">
+        <button id="start" >Продолжить</button>
+         <button id="stop" >Остановить</button>
+        </span>
+        
+    </body> 
+</html>
