@@ -1,8 +1,16 @@
+import "style-loader!css-loader!../style.css";
+
 import { diffDates, diffToHtml } from "./datecalc.js";
 import { formatError } from "./utils.js";
 import { calcOn, timOn } from "./selectCapter.js";
 import { timerInOut, stopOn, startOn } from "./timer.js";
 //import {Howl, Howler} from './howler.js';
+
+import chunk from "lodash/chunk";
+
+console.log(chunk(["a", "b", "c", "d"]), 2)
+
+
 const dateCalcForm = document.getElementById("datecalc");
 const dateCalcResult = document.getElementById("datecalc__result");
 
