@@ -1,0 +1,8 @@
+CREATE PROCEDURE ShowRegion
+ @RegID int
+AS
+SELECT Territories.TerritoryDescription,
+   Region.RegionDescription
+ FROM Territories INNER JOIN
+   Region ON Territories.RegionID = Region.RegionID
+ WHERE Territories.RegionID = @RegID

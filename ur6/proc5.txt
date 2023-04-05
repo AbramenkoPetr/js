@@ -1,0 +1,4 @@
+CREATE PROCEDURE ins_cust(n CHAR(50), e CHAR(50))
+     begin
+        insert into customers  (name, email) value (n, e);
+     end

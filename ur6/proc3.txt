@@ -1,0 +1,8 @@
+CREATE TRIGGER KeepTrack ON Customers
+FOR INSERT, UPDATE
+AS
+UPDATE Customers
+SET Customers.UpdatedBy = USER_NAME(),
+   Customers.UpdatedWhen = GETDATE()
+FROM inserted, Customers
+WHERE inserted.CustomerID = Customers.CustomerID

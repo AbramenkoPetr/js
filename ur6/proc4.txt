@@ -1,0 +1,11 @@
+REATE PROCEDURE sum_vendor(i INT)
+     begin
+        DROP VIEW IF EXISTS report_vendor;
+        CREATE VIEW report_vendor AS SELECT incoming.id_vendor,
+          magazine_incoming.id_product, magazine_incoming.quantity,
+          prices.price, magazine_incoming.quantity*prices.price AS summa
+          FROM incoming, magazine_incoming, prices
+          WHERE magazine_incoming.id_product= prices.id_product AND
+          magazine_incoming.id_incoming= incoming.id_incoming;
+        SELECT SUM(summa) FROM report_vendor WHERE id_vendor=i;
+     end
