@@ -1,0 +1,159 @@
+<h1>Авторизация пользователя</h1>
+<script>
+  //Handlebars.registerHelper('json', function(context) {
+  //  return JSON.stringify(context);
+//});
+
+  let pas = `{{this.password}}`;
+  //console.log('pasword ', pas);
+  let users1 = [];
+  users1 = `{{ this.usersEmail}}`;
+  //console.log('users ', users1);
+  const usersEmail = users1.split(',');
+  //console.log('usersEmail ', usersEmail);
+  //users1.forEach(e => {console.log(e.email)});
+  </script>
+<form method="post" action="/users/auth" enctype="multipart/form-data">
+  
+  
+  <div class="mb-3" style="display: flex; justify-content: space-around; width: 600px;">
+    <label for="emailInput" class="form-label">Адрес email</label>
+    <input class="form-control" name="email" id="emailInput" style="width: 300px;">
+    
+  </div>
+  
+  <div class="mb-3" style="display: flex; justify-content: space-around; width: 600px;">
+    <label for="pswdInput" class="form-label">Пароль</label>
+    <input class="form-control" name="password" id="pswdInput" style="width: 300px;">
+  </div>
+  
+  
+  
+<div class="form-group">
+  <button type="button" class="btn btn-primary" onclick='sendForm1()'>Авторизация</button>
+</div>
+</form>
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  Date.prototype.toDateInputValue = (function() {
+    var local = new Date(this);
+    local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+    return local.toJSON().slice(0,10);
+  });
+ var id1 = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&')[0];
+ //var idComment = wimdow
+    //console.log('hashes', id1)
+  function sendForm() {
+    var data = new FormData($('form')[0]);
+    
+    var cod = data.get('cod');
+    let pas = `{{this.password}}`;
+    if(pas != cod){alert('Не верный код подтверждения'); return}
+      const formDataObj = {};
+      data.forEach((value, key) => (formDataObj[key] = value));
+      //console.log(JSON.stringify(formDataObj));
+    $.ajax({
+      url: `/comments/edit`,
+      //url: `${id1}`,
+      data: JSON.stringify(formDataObj),
+      cache: false,
+      contentType: 'application/json; charset=UTF-8',
+      processData: false,
+      method: 'POST',
+      success: function() {
+        alert('Комментарий отредактирован')
+        window.location.href = `/comments/edit/${id}`;//**
+      }
+    });
+  }
+
+  function sendEmail(){
+    var data = new FormData($('form')[0]);
+    //var id = data.get('idComment');
+    var email = data.get('email');
+    //console.log('email', email)
+    users1 = `{{ this.usersEmail}}`;
+    const usersEmail = users1.split(',');
+    
+    for (let i = 0; i < usersEmail.length; i++){
+      if(usersEmail[i] === email){
+        alert('email уже зарегистрирован');
+        return;
+      }
+    }
+    const formDataObj = {};
+      data.forEach((value, key) => (formDataObj[key] = value));
+    $.ajax({
+      url: `/news/registr/email`,
+      //url: `${id1}`,
+      data: JSON.stringify(formDataObj),
+      cache: false,
+      contentType: 'application/json; charset=UTF-8',
+      processData: false,
+      method: 'POST',
+      success: function() {
+        alert('Письмо отправлено');
+        //window.location.href = `/comments/edit/${id}`;//**
+      }
+      
+    });
+  }
+
+  function sendForm1() {
+    var data = new FormData($('form')[0]);
+      //console.log('data', data)
+    const formDataObj = {};
+    data.forEach((value, key) => (formDataObj[key] = value));
+    //console.log('dataformDataObj ', JSON.stringify(formDataObj))
+    $.ajax({
+      url: '/users/auth',
+      data: JSON.stringify(formDataObj),
+      cache: false,
+      contentType: 'application/json; charset=UTF-8',
+      processData: false,
+      method: 'POST',
+      success: function(dataReq) {
+        console.log("data req " , dataReq);
+        console.log("dataReq.password req " , dataReq.password);
+        console.log("data " , data.get('email'), data.get('password'));
+        //alert('test');
+        if(dataReq.comp === false){alert('Не верные логин/пароль'); return;}
+        //return;
+
+        //alert('Пользователь зарегистрирван');
+        const user = {
+          email: data.get('email'),
+          password: data.get('password'),
+	  id: dataReq.userOrig.id,
+	  avatar: dataReq.userOrig.avatar
+        };
+        console.log("user " , user);
+        localStorage.setItem('user', JSON.stringify(user));
+        //window.location.href = '/news/all';
+        $.ajax({
+      url: '/auth/login',
+      data: user,
+      cache: false,
+      contentType: false,
+      processData: false,
+      method: 'POST',
+      success: function(access_token) {
+        //console.log("access_token " , access_token, 'some value');
+        //console.log("data.password req " , data.password);
+        //console.log("data " , data.get('email'), data.get('password'));
+        localStorage.setItem('access_token', /*JSON.stringify(*/'Bearer ' + access_token.access_token/*)*/);
+        alert('Пользователь авторизован');
+        
+        window.location.href = '/blog/news/all';
+      }
+    });
+      }
+    });
+      
+  }
+  
+</script>

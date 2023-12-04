@@ -1,0 +1,58 @@
+
+  <div class="row">
+    
+      <div class="col-lg-6">
+        <div class="card">
+          <img src='{{this.cover}}' class="card-img-top" style="height: 200px; object-fit: cover;" alt=''>
+          <div class="card-body">
+		this.id{{this.id}}
+            <h5 class="card-title">{{this.title}}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Автор: {{this.user.firstName}} {{this.user.lastName}}</h6>
+            <h6 class="card-subtitle mb-2 text-muted">Дата создания: {{this.createdAt}}</h6>
+            <p class="card-text">{{this.description}}</p>
+            <h6 class="card-text">Количество просмотров {{this.countView}}</h6>
+            <div style="display: flex; justify-content: space-around;">
+            <button type="button" class="btn btn-primary" onclick='sendForm()'>Удалить</button>
+            <button type="button" class="btn btn-primary" onclick='exit()'>Отмена</button>
+           </div>
+          </div>
+        </div>
+      </div>
+    
+  </div>
+<script>console.log('this.id ', `{{this.id}}`)</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+ var id1 = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&')[0];
+ //var idComment = wimdow
+    console.log('hashes', id1)
+  function sendForm() {
+    var data = new FormData($('form')[0]);
+    var id = data.get('idComment');
+    var idNews = `{{this.id}}`;
+    //console.log('idNews ', idNews)
+      const formDataObj = {};
+      //return;
+      data.forEach((value, key) => (formDataObj[key] = value));
+      //console.log(JSON.stringify(formDataObj));
+    $.ajax({
+      url: `/news/api/${idNews}`,
+      //url: `${id1}`,
+      data: JSON.stringify(formDataObj),
+      cache: false,
+      contentType: 'application/json; charset=UTF-8',
+      processData: false,
+      method: 'DELETE',
+      success: function() {
+        alert('Новость удалена')
+        window.location.href = `/news/all`;//**
+      }
+    });
+  }
+  function exit(){
+    var data = new FormData($('form')[0]);
+    //var id = data.get('idComment');
+    var idNews = data.get('idNews');
+    window.location.href = `/news/all`;
+  }
+</script>

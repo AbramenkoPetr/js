@@ -1,0 +1,55 @@
+
+  
+   {{#if comments}}  
+
+  <div class="row">
+    
+    {{#each comments}}
+      <script>
+        //console.log('user ', `{{this.author}}`);
+        //this.test = 'test';
+        //document.getElementById("user").textContent = text;
+        //console.log('user userId ', `{{this.userId}}`);
+        //*if (`{{this.userId}}` === 1)*/ document.getElementById("edit").innerHTML=`<a href="/news/create/new">Добавить новость</a>`;
+        </script>
+      <div class="col-lg-6">
+        <div class="card" style="flex-direction: row; align-items: center;">
+            <div>
+                <img src = '{{this.avatar}}' class="card-img-top" style="height: 100px; width: 100px; object-fit: cover;" alt=''>
+            </div>
+          
+          <div class="card-body">
+            <!--<h6 class="card-title">userId: {{this.userId}}`{{this.test}}`</h6>-->
+            <h6 class="card-subtitle mb-2 text-muted">Автор: {{this.author}}</h6>
+            <!--<h6 class="card-subtitle mb-2 text-muted">Дата создания: {{this.createdAt}}</h6>-->
+            <p class="card-text">{{this.message}}</p>
+            <div style=" justify-content: space-around;">
+              <div id="edit" class='s{{this.userId}}' style="display: none;">
+            <a href="/comments/edit/{{this.id}}">Редактировать</a>
+            
+            <a href="/comments/delete/{{this.id}}/{{this.newsId}}">Удалить</a>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--<a href="http://localhost:3000/comments/api/details/{{this.id}}">Показать комментарии</a>-->
+       
+    {{/each}}
+  </div>
+    {{else}}
+  <h1>Список комментариев пуст!</h1>
+    {{/if}}
+<script>
+    //this.test = 'test';
+    //console.log('test ', `{{this.test}}`);
+    var id_user = JSON.parse(localStorage.getItem('user')).id;
+    //console.log('id_user ', id_user);
+    //document.querySelectorAll("#edit").innerHTML=`<a href="/news/create/new">Добавить новость</a>`;
+    const elsP = document./*querySelector('#edit').*/querySelectorAll('.s'+id_user);
+    //console.log('elsP ', elsP);
+    elsP.forEach((el) => {
+  // установим каждому элементу background-color="yellow"
+  el.style ="display: flex; justify-content: space-around;";
+});
+    </script>

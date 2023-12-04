@@ -1,0 +1,30 @@
+
+<header class="header  py-3 bg-light" >
+    <div class="container" style="justify-content: space-between;display: flex;">
+        <!--<span class="text-muted">Все права защищены</span>-->
+        <!--<form href="/news/allhb" target="_blank">
+   <button>Список новостей</button>-->
+   <a href="/blog/">На главную</a>
+   <a href="/blog/news/all">Список новостей</a>
+   <div id="add_news"></div>
+   <!--<a href="/news/create/new">Добавить новость</a>-->
+   <a href="/blog/news/auth">Авторизация</a>
+   <a href="/blog/news/registr">Регистрация</a>
+
+   <a  id = "user" style="color: rgb(94, 255, 0);"></a>
+   
+    </div>
+    
+
+</header>
+<script>
+    document.test = 'test';
+    var text ='';
+    var suser = JSON.parse(localStorage.getItem('user'));
+    if (suser) {text = suser.email} else text ='Гость';
+    //console.log('suser ', suser.email);
+    const access_token = localStorage.getItem('access_token');
+    //console.log('access_token ', access_token);
+    document.getElementById("user").textContent = text;
+    if (suser) document.getElementById("add_news").innerHTML=`<a href="/news/create/new">Добавить новость</a>`;
+</script>

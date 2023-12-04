@@ -1,0 +1,65 @@
+{{#if news}}
+  <div class="row">
+    {{#each news}}
+      <div class="col-lg-6">
+        <div class="card" style="margin-bottom: 20px; ">
+          {{#if this.cover}}
+          <img src='{{this.cover}}' class="card-img-top" style="height: 200px; object-fit: cover;" alt=''>
+          {{this.cover}}
+          {{/if}}
+          <div class="card-body">
+            
+            <h5 class="card-title" style="display: flex; justify-content: space-around;">{{this.title}}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Автор: {{this.user.firstName}} {{this.user.lastName}}</h6>
+            <!--<h6 class="card-subtitle mb-2 text-muted">Дата создания: {{this.createdAt}}</h6>-->
+            <p class="card-text">{{this.description}}</p>
+            <div style="display: flex; justify-content: space-around;">
+            <a href="/news/detail/{{this.id}}">Детализация</a>
+            <a href="/comments/api/details/{{this.id}}">Показать комментарии</a>
+            <div id="add_com" style="display: none;">
+            <a href="/comments/create/comment?{{this.id}}">Добавить комментарий</a>
+            </div>
+            </div>
+            <div id="s{{this.userId}}" style="display: none;">
+              <a href="/news/edit/{{this.id}}">Редактировать</a>
+              <a href="/news/delete/{{this.id}}">Удалить</a>
+            </div>
+            <div style="display: flex; justify-content: space-around;">
+              <div id="disp_com">
+            
+            </div>
+            
+            </div>
+          </div>
+        </div>
+      </div>
+       
+    {{/each}}
+  </div>
+{{else}}
+  <h1>Список новостей пуст!</h1>
+{{/if}}
+
+
+<script>
+    //this.test = 'test';
+    console.log('id ', `{{this.id}}`);
+    var id_user = JSON.parse(localStorage.getItem('user')).id;
+    if(id_user) {
+      const eladd = document./*querySelector('#edit').*/querySelectorAll('#add_com');
+      eladd.forEach((el) => {
+  
+      el.style='';
+      });
+    }
+    //console.log('id_user ', id_user);
+    //document.querySelectorAll("#edit").innerHTML=`<a href="/news/create/new">Добавить новость</a>`;
+    const elsP = document./*querySelector('#edit').*/querySelectorAll('#s'+id_user);
+    //console.log('elsP ', elsP);
+    elsP.forEach((el) => {
+  
+  el.style='display: flex; justify-content: space-around;';
+});
+    </script>
+
+
