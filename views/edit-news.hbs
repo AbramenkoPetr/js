@@ -1,0 +1,63 @@
+<h1>Редактирование новости</h1>
+{{#with news}}
+<form method="post" action="/news/edit"  enctype="multipart/form-data">
+  <div class="mb-3">
+    <label for="titleInput" class="form-label">Заголовок</label>
+    <input class="form-control" name="title" id="titleInput" value="{{this.title}}">
+  </div>
+  <div class="mb-3">
+    <label for="descriptionInput" class="form-label">Описание</label>
+    <textarea class="form-control" name="description" id="descriptionInput" rows="3" >{{this.description}}</textarea>
+  </div>
+  <!--<div class="mb-3">
+    <label for="authorInput" class="form-label">Автор</label>
+    <input class="form-control" name="author" id="authorInput" value="{{this.author}}">
+  </div>-->
+  <!--<div class="mb-3">
+    <label for="dateInput" class="form-label">categoryId</label>
+    <input type="number" class="form-control" name="categoryId" id="dateInput" value="1">
+  </div>-->
+  <!--<div class="mb-3" id="dateInput" name="createdAt">Дата создания{{this.value}}</div>-->
+  <div class="form-group">
+    <label for="cover">Обложка новости</label>
+    <input type="file" class="form-control-file" id="cover" name="cover">
+  </div>
+  <div> <input type="hidden" class="form-control" name="id" id="id" value="{{this.id}}"></div>
+  <!--  <input type="submit" value="Создать">-->
+  <button type="button" class="btn btn-primary" onclick=sendForm()>Сохранить</button>
+</form>
+{{/with}}
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<script>
+  Date.prototype.toDateInputValue = (function() {
+    var local = new Date(this);
+    local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+    return local.toJSON().slice(0,10);
+  });
+  //document.getElementById('dateInput').value = new Date().toDateInputValue();
+
+  function sendForm() {
+    var data = new FormData($('form')[0]);
+      //console.log('data', data)
+    $.ajax({
+      url: '/news/edit',
+      data: data,
+      cache: false,
+      contentType: false,
+      processData: false,
+      method: 'POST',
+      success: function() {
+        alert('Новость отредактирована')
+        window.location.href = '/news/all';
+      }
+    });
+  }
+</script>
+
+
+
+  

@@ -1,0 +1,188 @@
+<h1>Регистрация пользователя</h1>
+<script>
+  //Handlebars.registerHelper('json', function(context) {
+  //  return JSON.stringify(context);
+//});
+
+  let pas = `{{this.password}}`;
+  console.log('pasword ', pas);
+  let users1 = [];
+  users1 = `{{ this.usersEmail}}`;
+  console.log('users ', users1);
+  const usersEmail = users1.split(',');
+  console.log('usersEmail ', usersEmail);
+  usersEmail.forEach(e => {console.log(e.email)});
+  </script>
+<form method="post" action="/users/registr" enctype="multipart/form-data">
+  
+  
+  <div class="mb-3" style="display: flex; justify-content: space-around; width: 600px;">
+    <label for="emailInput" class="form-label">Адрес email</label>
+    <input class="form-control" name="email" id="emailInput" style="width: 300px;">
+    <button type="button" class="btn btn-primary" onclick='sendEmail()'>Отправить</button>
+  </div>
+  <div class="mb-3" style="display: flex; justify-content: space-around; width: 600px;">
+    <label for="codInput" class="form-label">Код подтверждения</label>
+    <input class="form-control" name="cod" id="codInput" style="width: 300px;">
+  </div>
+  <div class="mb-3" style="display: flex; justify-content: space-around; width: 600px;">
+    <label for="pswdInput" class="form-label">Пароль</label>
+    <input class="form-control" name="password" id="pswdInput" style="width: 300px;">
+  </div>
+  <div class="mb-3" style="display: flex; justify-content: space-around; width: 600px;">
+    <label for="firstNameInput" class="form-label">Имя</label>
+    <input class="form-control" name="firstName" id="firstNameInput" style="width: 300px;">
+  </div>
+  <div class="mb-3" style="display: flex; justify-content: space-around; width: 600px;">
+    <label for="larstNameInput" class="form-label">Фамилия</label>
+    <input class="form-control" name="lastName" id="lastNameInput" style="width: 300px;">
+  </div>
+  <div class="form-group" style="display: flex; justify-content: space-around; width: 600px;">
+    <label for="avatar" class="form-label">Аватар</label>
+    <input type="file" class="form-control-file" id="avatarInput" name="avatar" style="width: 300px;">
+  <!--  </div>
+  <div class="mb-3" style="display: none;">
+    <label for="idInput" class="form-label">idNews</label>
+    <input class="form-control" name="idComment" id="idInput" value="{{this.id}}">
+  </div>
+<input type="submit" value="Создать">-->
+<label for="avatar"></label>
+
+<div class="form-group">
+  <button type="button" class="btn btn-primary" onclick='sendForm1()'>Регистрация</button>
+</div>
+</form>
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  Date.prototype.toDateInputValue = (function() {
+    var local = new Date(this);
+    local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+    return local.toJSON().slice(0,10);
+  });
+ var id1 = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&')[0];
+ //var idComment = wimdow
+    console.log('hashes', id1)
+  function sendForm() {
+    var data = new FormData($('form')[0]);
+    
+    var cod = data.get('cod');
+    let pas = `{{this.password}}`;
+    if(pas != cod){alert('Не верный код подтверждения'); return}
+      const formDataObj = {};
+      data.forEach((value, key) => (formDataObj[key] = value));
+      console.log(JSON.stringify(formDataObj));
+    $.ajax({
+      url: `/comments/edit`,
+      //url: `${id1}`,
+      data: JSON.stringify(formDataObj),
+      cache: false,
+      contentType: 'application/json; charset=UTF-8',
+      processData: false,
+      method: 'POST',
+      success: function() {
+        alert('Комментарий отредактирован')
+        window.location.href = `/comments/edit/${id}`;//**
+      }
+    });
+  }
+
+  function sendEmail(){
+    var data = new FormData($('form')[0]);
+	let pas = `{{this.password}}`;
+        console.log('pas ', pas);
+        data.set('password', pas);
+    //var id = data.get('idComment');
+    var email = data.get('email');
+    console.log('email', email);
+    users1 = `{{ this.usersEmail}}`;
+    console.log('users1 ', users1);	
+    const usersEmail = users1.split(',');
+    console.log('usersEmail ', usersEmail);
+    for (let i = 0; i < usersEmail.length; i++){
+      if(usersEmail[i] === email){
+        alert('email уже зарегистрирован');
+        return;
+      }
+    }
+    const formDataObj = {};
+      data.forEach((value, key) => (formDataObj[key] = value));
+	//let pas = `{{this.password}}`;
+	//console.log('pas ', pas);
+	//data.set('pas', pas);
+	console.log('formDataObj ', JSON.stringify(formDataObj));
+	//return;
+    $.ajax({
+      url: `/news/registr/email`,
+      //url: `${id1}`,
+      data: JSON.stringify(formDataObj),
+      cache: false,
+      contentType: 'application/json; charset=UTF-8',
+      processData: false,
+      method: 'POST',
+      success: function() {
+        alert('Письмо отправлено');
+        //window.location.href = `/comments/edit/${id}`;//**
+      }
+      
+    });
+  }
+
+  function sendForm1() {
+    var data = new FormData($('form')[0]);
+      console.log('data', data);
+      var cod = data.get('cod');
+      console.log('cod ', cod);
+    let pas = `{{this.password}}`;
+    if(pas != cod){alert('Не верный код подтверждения'); return}
+      var avatar = data.get('avatar');
+    //console.log(avatar);
+    $.ajax({
+      url: '/users/registr',
+      data: data,
+      cache: false,
+      contentType: false,
+      processData: false,
+      method: 'POST',
+      success: function(dataReq) {
+        console.log("data req " , dataReq);
+        
+        console.log("dataReq.password req " , dataReq.password);
+        console.log("data " , data.get('email'), data.get('password'));
+        alert('Пользователь зарегистрирван');
+        const user = {
+          email: data.get('email'),
+          password: data.get('password'),
+          id: dataReq.id,
+          avatar: dataReq.avatar
+        };
+        console.log("user " , user);
+        //return;
+        localStorage.setItem('user', JSON.stringify(user));
+        //window.location.href = '/news/all';
+        $.ajax({
+      url: '/auth/login',
+      data: user,
+      cache: false,
+      contentType: false,
+      processData: false,
+      method: 'POST',
+      success: function(access_token) {
+        console.log("access_token " , access_token, 'some value');
+        //console.log("data.password req " , data.password);
+        //console.log("data " , data.get('email'), data.get('password'));
+        localStorage.setItem('access_token', /*JSON.stringify(*/'Bearer ' + access_token.access_token/*)*/);
+        alert('Пользователь авторизован');
+        
+        window.location.href = '/news/all';
+      }
+    });
+      }
+    });
+      
+  }
+  
+</script>

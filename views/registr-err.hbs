@@ -1,0 +1,84 @@
+<h1>Email не существует</h1>
+
+<form method="post" action="/comments/edit" enctype="multipart/form-data"><!--//**-->
+  
+  <div class="mb-3">
+    <label for="descriptionInput" class="form-label">Комментарий</label>
+    <textarea class="form-control" name="message" id="descriptionInput" rows="3" value="Добавленная новость">{{this.message}}</textarea>
+  </div>
+  <div class="mb-3" style="display: flex">
+    <label for="emailInput" class="form-label">Адрес email</label>
+    <input class="form-control" name="email" id="emailInput" >
+    <button type="button" class="btn btn-primary" onclick='sendEmail()'>Отправить</button>
+  </div>
+  
+  <!--<div class="form-group">
+    <label for="avatar">Аватар</label>
+    <input type="file" class="form-control" id="avatar" name="avatar" >
+  </div>-->
+  <div class="mb-3" style="display: none;">
+    <label for="idInput" class="form-label">idNews</label>
+    <input class="form-control" name="idComment" id="idInput" value="{{this.id}}">
+  </div>
+<!--  <input type="submit" value="Создать">-->
+  <button type="button" class="btn btn-primary" onclick='sendForm()'>Отправить</button>
+</form>
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  Date.prototype.toDateInputValue = (function() {
+    var local = new Date(this);
+    local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+    return local.toJSON().slice(0,10);
+  });
+ var id1 = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&')[0];
+ //var idComment = wimdow
+    //console.log('hashes', id1)
+  function sendForm() {
+    var data = new FormData($('form')[0]);
+    var id = data.get('idComment');
+      const formDataObj = {};
+      data.forEach((value, key) => (formDataObj[key] = value));
+      //console.log(JSON.stringify(formDataObj));
+    $.ajax({
+      url: `http://localhost:3000/comments/edit`,
+      //url: `${id1}`,
+      data: JSON.stringify(formDataObj),
+      cache: false,
+      contentType: 'application/json; charset=UTF-8',
+      processData: false,
+      method: 'POST',
+      success: function() {
+        alert('Комментарий отредактирован')
+        window.location.href = `/comments/edit/${id}`;//**
+      }
+    });
+  }
+
+  function sendEmail(){
+    var data = new FormData($('form')[0]);
+    //var id = data.get('idComment');
+    var email = data.get('email');
+    console.log('email', email)
+    const formDataObj = {};
+      data.forEach((value, key) => (formDataObj[key] = value));
+    $.ajax({
+      url: `http://localhost:3000/news/registr/email`,
+      //url: `${id1}`,
+      data: JSON.stringify(formDataObj),
+      cache: false,
+      contentType: 'application/json; charset=UTF-8',
+      processData: false,
+      method: 'POST',
+      success: function() {
+        alert('Письмо отправлено')
+        //window.location.href = `/comments/edit/${id}`;//**
+      }
+    });
+    //window.location.href = `/comments/api/details/${idNews}`;
+  }
+  console.log('rs ',rs);
+</script>

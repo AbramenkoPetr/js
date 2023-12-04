@@ -1,0 +1,61 @@
+<h1>Создание новости</h1>
+<form method="post" action="/news" enctype="multipart/form-data">
+  <div class="mb-3">
+    <label for="titleInput" class="form-label">Заголовок</label>
+    <input class="form-control" name="title" id="titleInput">
+  </div>
+  <div class="mb-3">
+    <label for="descriptionInput" class="form-label">Описание</label>
+    <textarea class="form-control" name="description" id="descriptionInput" rows="3"></textarea>
+  </div>
+  <!--<div class="mb-3">
+    <label for="authorInput" class="form-label">Автор</label>
+    <input class="form-control" name="author" id="authorInput">
+  </div>-->
+  <div class="mb-3" style="display: none;">
+    <label for="dateInput" class="form-label">Дата создания</label>
+    <input class="form-control" name="createdAt" id="dateInput">
+  </div>
+   <!--<div class="mb-3" id="dateInput" name="createdAt">Дата создания{{this.value}}</div>-->
+  <div class="form-group">
+    <label for="cover">Обложка новости</label>
+    <input type="file" class="form-control-file" id="cover" name="cover">
+  </div>
+<!--  <input type="submit" value="Создать">-->
+  <button type="button" class="btn btn-primary" onclick='sendForm()'>Создать</button>
+</form>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  Date.prototype.toDateInputValue = (function() {
+    var local = new Date(this);
+    local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+    return local.toJSON().slice(0,10);
+  });
+  document.getElementById('dateInput').value = new Date().toDateInputValue();
+
+  function sendForm() {
+    var data = new FormData($('form')[0]);
+      //console.log('data', JSONstringifi(data));
+      var suser = JSON.parse(localStorage.getItem('user'));
+      data.set('userId', suser.id);
+      const formDataObj = {};
+      data.forEach((value, key) => (formDataObj[key] = value));
+      //console.log('data', formDataObj);
+      //return;
+    $.ajax({
+      url: '/news',
+      data: data,
+      cache: false,
+      contentType: false,
+      processData: false,
+      method: 'POST',
+      success: function() {
+        alert('Новость создана')
+        window.location.href = '/news/all';
+      }
+    });
+  }
+</script>

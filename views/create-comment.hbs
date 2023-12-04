@@ -1,0 +1,67 @@
+<h1>Создание комментария</h1>
+<form method="post" action="/api/${id}" enctype="multipart/form-data"><!--//**-->
+ <!-- this.id{{this.id}}-->
+  <div class="mb-3">
+    <label for="descriptionInput" class="form-label">Комментарий</label>
+    <textarea class="form-control" name="message" id="descriptionInput" rows="3" value="Добавленная новость"></textarea>
+  </div>
+  <!--<div class="mb-3">
+    <label for="authorInput" class="form-label">Автор</label>
+    <input class="form-control" name="author" id="authorInput" value="Петр">
+  </div>
+  
+  <div class="form-group">
+    <label for="avatar">Аватар</label>
+    <input type="file" class="form-control" id="avatar" name="avatar" >
+  </div>-->
+  <div class="mb-3" style="display: none;">
+    <label for="idInput" class="form-label">idNews</label>
+    <input class="form-control" name="idNews" id="idInput" value="{{this.id}}">
+  </div>
+<!--  <input type="submit" value="Создать">-->
+  <button type="button" class="btn btn-primary" onclick='sendForm()'>Создать</button>
+</form>
+<script>
+    document.test = 'test';
+    var text ='';
+    var suser = JSON.parse(localStorage.getItem('user'));
+    //if (suser) {text = suser.email} else text ='Гость';
+    //console.log('suser ', suser);
+    //console.log('suser ', suser.email);
+    //access_token = localStorage.getItem('access_token');
+    //console.log('access_token ', access_token);
+    //document.getElementById("user").textContent = text;
+    //if (suser) document.getElementById("add_news").innerHTML=`<a href="/news/create/new">Добавить новость</a>`;
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+ var id = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&')[0];
+    console.log('hashes', id)
+  function sendForm() {
+    var data = new FormData($('form')[0]);
+      //console.log('data', data)
+      var suser = JSON.parse(localStorage.getItem('user'));
+      data.set('idUser', suser.id);
+      data.set('idNews', id);
+      data.set('avatar', suser.avatar);
+      //console.log('data.idNews', data.get('idNews'));
+      const formDataObj = {};
+      data.forEach((value, key) => (formDataObj[key] = value));
+      console.log('data', formDataObj);
+      //return;
+    $.ajax({
+      url: `/comments/api/${id})`,
+      data: data,
+      cache: false,
+      contentType: false,
+      processData: false,
+      method: 'POST',
+      success: function() {
+        alert('Комментарий создан')
+        window.location.href = `/comments/api/details/${id}`;//**
+      }
+    });
+  }
+</script>

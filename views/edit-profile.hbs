@@ -1,0 +1,82 @@
+<h1>Редактирование профиля</h1>
+<!--<script>console.log('edit profile hbs _user ', this.user)</script>-->
+{{#with _user}}
+<h6>Привет, {{this.firstName}}!</h6>
+<form method="post" action="/users/api" enctype="multipart/form-data">
+  <div class="mb-3">
+    <label for="firstName" class="form-label">Имя</label>
+    <input class="form-control" name="firstName" id="firstName" value="{{this.firstName}}">
+  </div>
+  <div class="mb-3">
+    <label for="firstName" class="form-label">Имя</label>
+    <input class="form-control" name="lastName" id="lastName" value="{{this.lastName}}">
+  </div>
+  <div class="mb-3">
+    <label for="email" class="form-label">email</label>
+    <input class="form-control" type="email" name="email" id="email" value="{{this.email}}">
+  </div>
+  <div class="mb-3">
+    <label for="password" class="form-label">Новый пароль</label>
+    <input class="form-control" name="password" id="password">
+  </div>
+<!--  <input type="submit" value="Создать">-->
+  <button type="button" class="btn btn-primary" onclick='sendForm()'>Редактировать</button>
+</form>
+{{/with}}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!--<script src="https://unpkg.com/axios/dist/axios.min.js"></script>-->
+<!--<script>
+  function sendForm() {
+    //var axios = require('axios').default;
+    const data = {firstName: $('#firstName')[0].value, email: $('#email')[0].value, password: $('#password')[0].value};
+    console.log('edit-profile.hbs data ', data);
+    axios({
+      method: 'PATCH',
+      headers: {
+        'content-type': 'application/json',
+        "Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIsImlhdCI6MTY5MDc1MjM4OCwiZXhwIjoxNzI2NzQ4Nzg4fQ.qZSFi2YeM-smor0n8eSZaeRJh0-iPfvJ3fr2zYCvjtw"
+      },
+      data: {firstName: $('#firstName')[0].value, email: $('#email')[0].value, password: $('#password')[0].value},
+      url: '/users/api',
+    }).then((data) => {
+      window.location.reload()
+    })
+  }
+</script>-->
+
+<script>
+  Date.prototype.toDateInputValue = (function() {
+    var local = new Date(this);
+    local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+    return local.toJSON().slice(0,10);
+  });
+  //document.getElementById('dateInput').value = new Date().toDateInputValue();
+
+  function sendForm() {
+    var data = new FormData($('form')[0]);
+      console.log('data', data);
+      const formDataObj = {};
+    data.forEach((value, key) => (formDataObj[key] = value));
+    /*formDataObj.categoryId = Number(formDataObj.categoryId);
+    formDataObj.authorId = Number(formDataObj.authorId);*/
+    console.log(JSON.stringify(formDataObj));
+    $.ajax({
+      url: '/users/api',
+      data: data,
+      cache: false,
+      contentType: false,
+      processData: false,
+      method: 'POST',
+      //headers: {
+      //  'content-type': 'application/json',
+      //  "Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIsImlhdCI6MTY5MDc1MjM4OCwiZXhwIjoxNzI2NzQ4Nzg4fQ.qZSFi2YeM-smor0n8eSZaeRJh0-iPfvJ3fr2zYCvjtw"
+      //},
+      success: function() {
+        alert('Профиль отредактирован')
+        //window.location.href = '/news/all';
+      }
+    });
+  }
+</script>
+
