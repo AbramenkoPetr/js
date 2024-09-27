@@ -1,0 +1,36 @@
+.cartItem1   {
+    
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    text-align: center;
+    align-items: center;
+    margin-top: 10px;
+    border-bottom: 1px solid #ebebeb;
+}
+.cartItem2   {
+    
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    text-align: center;
+    align-items: center;
+    /*margin-top: 5px;*/
+    border-bottom: 1px solid #ebebeb;
+}
+.cart {
+    width: 512px;
+    /*border-bottom: 1px solid #ebebeb;*/
+    background-color: white;
+    position: absolute;
+    right: 0;
+    margin-right: 10px;
+    z-index: 3;
+}
+
+.totalPrice {
+    text-align: end;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    margin-right: 37px;
+}
