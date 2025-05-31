@@ -1,0 +1,9 @@
+{ 
+ name: "firstconnection", 
+ type: "mysql", 
+ host: "localhost", 
+ port: 3306, 
+ username: "userms", 
+ password: "1234", 
+ database: "db_requests" 
+}

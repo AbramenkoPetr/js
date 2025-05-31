@@ -1,0 +1,7 @@
+/*CREATE USER 'dbuser'@'localhost' IDENTIFIED BY '1234';
+GRANT ALL PRIVILEGES ON db.* TO 'dbuser'@'localhost';
+ALTER USER 'dbuser'@'localhost' IDENTIFIED WITH mysql_native_password BY '1234';
+FLUSH PRIVILEGES;*/
+CREATE DATABASE db_requests DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+USE db_requests;
+source db_requests.sql;
