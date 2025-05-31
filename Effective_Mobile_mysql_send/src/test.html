@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<body>
+<form id="form1">
+    <div>
+        <textarea id="area1" rows="5">Yes</textarea>
+        <input type="button" value="get txt" onclick="go()" />
+        <br />
+        <p id="as">Now what</p>
+    </div>
+</form>
+</body>
+
+<script >
+function go() {
+    var c1 = document.getElementById('area1').value;
+    var d1 = document.getElementById('as');
+    console.log(c1, d1)
+    d1.innerHTML = c1;
+}
+</script>
